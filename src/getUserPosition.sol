@@ -1,4 +1,4 @@
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.0;
 
 import "openzeppelin-contracts-06/contracts/token/ERC20/IERC20.sol";
 
@@ -27,24 +27,48 @@ interface IratherNFT {
 
 contract UserPosition {
     IComptroller public comptroller;
-    IERC20 public usdc; // Add USDC token interface
-    IratherNFT public nftContract; // Interface to interact with the NFT contract
-    uint256 public insuranceFee = 10 * 1e6; // Set a fee of 10 USDC (adjust as needed)
+    IratherNFT public nftContract; // NFT contract interface
+    IERC20 public usdcToken; // Fake USDC interface
+
+    uint256 public insuranceFee = 10; // Example fee. Adjust as necessary.
 
     mapping(address => uint256) public insuredAmount;
 
-    constructor(address _comptroller, address _usdc, address _nftContract) {
+    constructor(address _comptroller, address _nftAddress, address _usdcToken) {
         comptroller = IComptroller(_comptroller);
-        usdc = IERC20(_usdc);
-        nftContract = IratherNFT(_nftContract);
+        nftContract = IratherNFT(_nftAddress);
+        usdcToken = IERC20(_usdcToken);
     }
 
-    function purchaseInsurance(string memory tokenURI) external {
+    function buyInsurance() public {
+        // Transfer USDC fee from user to this contract
         require(
-            usdc.transferFrom(msg.sender, address(this), insuranceFee),
-            "USDC transfer failed"
+            usdcToken.transferFrom(msg.sender, address(this), insuranceFee),
+            "USDC transfer failed!"
         );
-        nftContract.mint(msg.sender, tokenURI);
+
+        // Mint NFT
+        string memory metadata = _generateMetadata(msg.sender);
+        nftContract.mint(msg.sender, metadata);
+
+        // Logic to store the purchased insurance details can be added here
+    }
+
+    function _generateMetadata(
+        address user
+    ) internal pure returns (string memory) {
+        // Logic to generate metadata for the NFT based on the user's position
+        // This can be as simple or as complex as you need.
+        // For example, you could fetch details of the user's position and format it into a JSON string.
+
+        return
+            string(
+                abi.encodePacked(
+                    'data:application/json,{"name":"Insurance for ',
+                    user,
+                    '","description":"NFT representing insurance policy."}'
+                )
+            );
     }
 
     function getUserPosition(
