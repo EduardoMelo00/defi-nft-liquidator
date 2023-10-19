@@ -14,6 +14,7 @@ $ getLatestPrice(0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e)
 ```
 
    ## Setup goerli deply
+-   **Goerli Address**: 0x612cc20c87d6b20ac9f1badeb3920b095e89aed0
 
 -   **comptrollerCompound**: 0x3cBe63aAcF6A064D32072a630A3eab7545C54d78
 -   **nftAddress**: 0xfCBDCD29f15dC521Dfe9edA53f5B891753A2A560
