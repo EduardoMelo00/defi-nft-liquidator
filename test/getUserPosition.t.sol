@@ -402,7 +402,6 @@ contract UserPositionTest is Test {
         //     abi.encodeWithSelector(Comptroller.getAccountLiquidity.selector),
         //     abi.encode(0, 0, 1000000000000000000)
         // );
-        // problem here: how to manipulate price or borrow amount to make collateral to be liquidated?
         (error, liquidity, shortfall) = comptroller.getAccountLiquidity(
             address(this)
         );
