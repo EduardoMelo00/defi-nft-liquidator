@@ -89,11 +89,6 @@ contract UserPosition is UserPositionStorage, AccessControl {
         tokenInsuredAmount[tokenId] = 0;
     }
 
-    function updatePosition(address user, uint256 tokenId) public {
-        string memory metadata = _generateMetadata(user);
-        nftContract.updateTokenURI(tokenId, metadata);
-    }
-
     function deposit(address tokenAddress, uint256 amount) public {
         IERC20 token = IERC20(tokenAddress);
         require(token.transferFrom(msg.sender, address(this), amount));
