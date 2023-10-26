@@ -224,6 +224,24 @@ contract UserPosition is UserPositionStorage, AccessControl {
             );
     }
 
+    function updatePosition(address user, uint256 tokenId) public {
+        string memory metadata = _generateMetadata(user);
+
+        // Assume the NFT contract has a function to update token URI
+        nftContract.updateTokenURI(tokenId, metadata);
+    }
+
+    function performUpkeep(bytes calldata performData) external {
+        for (uint256 i = 0; i < totalNFTsMinted; i++) {
+            uint256 tokenId = nftContract.tokenByIndex(i);
+            address tokenOwner = nftContract.ownerOf(tokenId);
+            updatePosition(tokenOwner, tokenId);
+        }
+
+        // Update the last upkeep time
+        lastUpkeepTime = block.timestamp;
+    }
+
     function uintToString(uint256 value) internal pure returns (string memory) {
         return Strings.toString(value);
     }
